@@ -117,6 +117,7 @@ const UserList = () => {
     })
   }
 
+  const [userId, setUserId] = useState("")
   const [bleUserId, setBleUserId] = useState("ABCDEF")
   const [name, setName] = useState("ななし")
   const [location, setLocation] = useState("関東")
@@ -129,9 +130,9 @@ const UserList = () => {
   const [homepageLink, setHomepageLink] = useState("https://example.com")
 
   const createUser = async () => {
-    const id = nanoid()
-    await setDoc(doc(db, "users", id), {
-      id,
+    const docId = userId === "" ? nanoid() : userId
+    await setDoc(doc(db, "users", docId), {
+      id: docId,
       bleUserId,
       cheerUserIds: [],
       deviceUuid: "",
@@ -214,6 +215,7 @@ const UserList = () => {
         <button className="bg-white px-4 py-1 w-max mt-2 rounded-lg shadow" onClick={setFaker}>
           ダミー値
         </button>
+        <FormItem label="UserID" value={userId} onChange={setUserId} />
         <FormItem label="名前" value={name} onChange={setName} />
         <FormItem label="地域" value={location} onChange={setLocation} />
         <FormItem label="技術" value={techArea} onChange={setTechArea} />
