@@ -215,7 +215,7 @@ const UserList = () => {
         <button className="bg-white px-4 py-1 w-max mt-2 rounded-lg shadow" onClick={setFaker}>
           ダミー値
         </button>
-        <FormItem label="UserID" value={userId} onChange={setUserId} />
+        <FormItem label="UserID（空白にしたら自動生成）" value={userId} onChange={setUserId} />
         <FormItem label="名前" value={name} onChange={setName} />
         <FormItem label="地域" value={location} onChange={setLocation} />
         <FormItem label="技術" value={techArea} onChange={setTechArea} />
