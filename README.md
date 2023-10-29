@@ -1,30 +1,28 @@
-# nextjs-tailwind-template
+# Kanpai! ローカル開発用のデバッグツール
 
-TypeScript / React / Next.js / tailwind.css を利用する場合のテンプレートです。OGP や外部リンクなど、個人的によく使うコンポーネントをデフォルトで入れています。
+ハードウェアデバイスがない状態でも、WebUI上で乾杯をエミュレートしたデータをfirestoreにinsertできるツールです。
 
-## 開発
+## 使い方
 
-### フロント
+### 乾杯エミュレート
 
-環境変数
+ユーザー名の下にあるユーザー名ボタンをクリックすることで、その人が乾杯したと言うデータをfirestoreに挿入します
+<img width="550" alt="image" src="https://github.com/jphacks/OL_2311_3/assets/38308823/ce21dc12-44bb-459a-80d6-fa30efa85288">
 
-- `.env.example`を複製し、`.env.local`にリネーム
+### 乾杯データ取得
 
-開発サーバ
+誰と誰が乾杯したかのデータを表示します。deviceIdとbleUserIdが確認できます
 
-```bash
-yarn dev
-```
+<img width="555" alt="image" src="https://github.com/jphacks/OL_2311_3/assets/38308823/95530611-e111-4f7d-be80-3e35fc21a53d">
 
-ビルド
+### 乾杯数リセット
 
-```bash
-yarn build
-```
+今までの乾杯データをリセットとします
 
-Lint / format
+<img width="205" alt="image" src="https://github.com/jphacks/OL_2311_3/assets/38308823/15b53c9f-61d1-490b-82e8-d445d2d687d0">
 
-```bash
-yarn chcek # ESLint and prettier
-yarn fix # ESLint and prettier (auto fix)
-```
+### ユーザー追加
+
+架空のユーザーを追加します。「ダミー値」をクリックすると、faker-jsによる架空のユーザーデータが入力されます。
+
+<img width="501" alt="image" src="https://github.com/jphacks/OL_2311_3/assets/38308823/87442642-d66d-45d0-83ac-8330399625c9">
