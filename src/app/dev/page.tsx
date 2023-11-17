@@ -1,16 +1,16 @@
-import { ProdUserList } from "./ProdUserList"
+import { DevUserList } from "./DevUserList"
 
-const Index = () => {
+const Dev = () => {
   return (
     <main>
       <div className="m-4">
-        <ProdUserList />
+        <DevUserList />
       </div>
     </main>
   )
 }
 
-export default Index
+export default Dev
 
 export const metadata = {
   title: "Kanpai! Debugger",

@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  Firestore,
   addDoc,
   collection,
   deleteDoc,
@@ -13,9 +14,7 @@ import {
 import React, { useEffect, useState } from "react"
 import { MdOutlineLocalCafe } from "react-icons/md"
 import { fakerJA as faker } from "@faker-js/faker"
-import { nanoid } from "nanoid"
-
-import { db } from "@/lib/firebase"
+import { customAlphabet, nanoid } from "nanoid"
 
 type User = {
   id: string
@@ -32,12 +31,17 @@ type User = {
   homepageLink: string
 }
 
-const UserList = () => {
+type UserListProps = {
+  db: Firestore
+}
+
+const UserList = ({ db }: UserListProps) => {
   const [users, setUsers] = useState<User[]>([])
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "users"), (querySnapshot) => {
       querySnapshot.docChanges().forEach((change) => {
+        console.log(change)
         if (change.type === "added") {
           const data = change.doc.data()
           setUsers((users) => [...users, { id: change.doc.id, ...data } as User])
@@ -55,15 +59,17 @@ const UserList = () => {
     })
 
     return () => unsubscribe()
-  }, [])
+  }, [db])
 
   const kanpai = async (meId: string, targetId: string) => {
-    console.log(meId, targetId)
     const cheerUserIds = users.find((user) => user.id === meId)?.cheerUserIds ?? []
-    console.log(db, cheerUserIds, targetId)
+    const targetUser = users.find((user) => user.id === targetId)
+    if (targetUser == null) {
+      return
+    }
     await updateDoc(doc(db, "users", meId), {
-      cheerUserIds: [...cheerUserIds, targetId],
-      lastCheersUserId: targetId,
+      cheerUserIds: [...cheerUserIds, targetUser.bleUserId],
+      lastCheersUserId: targetUser.bleUserId,
     })
     await addDoc(collection(db, "cheers"), {
       fromUserId: meId,
@@ -118,7 +124,7 @@ const UserList = () => {
   }
 
   const [userId, setUserId] = useState("")
-  const [bleUserId, setBleUserId] = useState("ABCDEF")
+  // const [bleUserId, setBleUserId] = useState("ABCDEF")
   const [name, setName] = useState("ななし")
   const [location, setLocation] = useState("関東")
   const [profileImageUrl, setProfileImageUrl] = useState(
@@ -131,6 +137,7 @@ const UserList = () => {
 
   const createUser = async () => {
     const docId = userId === "" ? nanoid() : userId
+    const bleUserId = customAlphabet("1234567890ABCDEF")(6)
     await setDoc(doc(db, "users", docId), {
       id: docId,
       bleUserId,
