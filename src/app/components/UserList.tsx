@@ -61,19 +61,22 @@ const UserList = ({ db }: UserListProps) => {
     return () => unsubscribe()
   }, [db])
 
-  const kanpai = async (meId: string, targetId: string) => {
-    const cheerUserIds = users.find((user) => user.id === meId)?.cheerUserIds ?? []
-    const targetUser = users.find((user) => user.id === targetId)
-    if (targetUser == null) {
+  const kanpai = async (meBleUserId: string, targetBleUserId: string) => {
+    console.log(meBleUserId, targetBleUserId)
+    const me = users.find((user) => user.bleUserId === meBleUserId)
+    if (me == null) {
+      console.log("me is null")
       return
     }
-    await updateDoc(doc(db, "users", meId), {
-      cheerUserIds: [...cheerUserIds, targetUser.bleUserId],
-      lastCheersUserId: targetUser.bleUserId,
+    const cheerUserIds = users.find((user) => me?.id === user.id)?.cheerUserIds ?? []
+    console.log(db, cheerUserIds, targetBleUserId)
+    await updateDoc(doc(db, "users", me.id), {
+      cheerUserIds: [...cheerUserIds, targetBleUserId],
+      lastCheersUserId: targetBleUserId,
     })
     await addDoc(collection(db, "cheers"), {
-      fromUserId: meId,
-      toUserId: targetId,
+      fromUserId: meBleUserId,
+      toUserId: targetBleUserId,
       timestamp: Date.now(),
     })
   }
@@ -124,7 +127,7 @@ const UserList = ({ db }: UserListProps) => {
   }
 
   const [userId, setUserId] = useState("")
-  // const [bleUserId, setBleUserId] = useState("ABCDEF")
+  const [bleUserId, setBleUserId] = useState("ABCDEF")
   const [name, setName] = useState("ななし")
   const [location, setLocation] = useState("関東")
   const [profileImageUrl, setProfileImageUrl] = useState(
@@ -169,8 +172,8 @@ const UserList = ({ db }: UserListProps) => {
                     if (counterUser == null) {
                       return
                     }
-                    kanpai(user.id, counterUser.id)
-                    kanpai(counterUser.id, user.id)
+                    kanpai(user.bleUserId, counterUser.bleUserId)
+                    kanpai(counterUser.bleUserId, user.bleUserId)
                   }}
                   className="border border-slate-200 rounded-lg shadow px-2 py-1 flex items-center"
                 >
